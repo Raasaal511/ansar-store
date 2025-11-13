@@ -3,14 +3,8 @@ import enum
 
 from backend.src.db.database import Base
 from sqlalchemy import (
-    CheckConstraint,
-    DateTime,
-    Enum,
-    ForeignKey,
-    Integer,
-    String,
-    UniqueConstraint,
-    func,
+    CheckConstraint, DateTime,Enum,
+    ForeignKey,UniqueConstraint,func,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
