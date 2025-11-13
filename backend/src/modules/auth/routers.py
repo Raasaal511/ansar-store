@@ -7,12 +7,14 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
+
 fake_db = {
     "user@example.com": {
         "username": "user@example.com",
         "password": "1234"
     }
 }
+
 
 @router.post("/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -22,6 +24,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
     token = create_access_token({"sub": user["username"]})
     return {"access_token": token, "token_type": "bearer"}
+
 
 @router.get("/me")
 def get_current_user(token: str = Depends(oauth2_scheme)):
