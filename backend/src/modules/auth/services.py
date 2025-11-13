@@ -1,5 +1,5 @@
 from passlib import CryptContext
-from jose import jwt, JWTError
+from jose import jwt, JWTError, ExpiredSignatureError
 from fastapi import HTTPException, status
 from datetime import datetime, timedelta, timezone
 from app import get_auth_data
