@@ -2,8 +2,8 @@ from passlib import CryptContext
 from jose import jwt, JWTError, ExpiredSignatureError
 from fastapi import HTTPException, status
 from datetime import datetime, timedelta, timezone
-from app import get_auth_data
-from app import SECRET_KEY, ALGORITHM
+from .env import get_auth_data
+from .env import SECRET_KEY, ALGORITHM
 
 
 
