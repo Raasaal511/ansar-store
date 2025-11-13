@@ -4,9 +4,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from ..users import crud
 from ..users.models import User, UserRole
 from ..users.schemas import UserCreate, UserResponse, UserUpdateStatus
+from ..users.services import check_user_role
 
 
 router = APIRouter(prefix="/users", tags=["users"])
+
 
 
 @router.post("/", response_model=UserResponse)
@@ -14,14 +16,17 @@ async def create_user(
     user_create: UserCreate,
     db: AsyncSession = Depends(get_async_session)
 ):
+
     existing_user = await crud.get_user_by_username(db, user_create.username)
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already exists")
     
+
     existing_email = await crud.get_user_by_email(db, user_create.email)
     if existing_email:
         raise HTTPException(status_code=400, detail="Email already exists")
     
+
     new_user = await crud.create_user(
         db,
         username=user_create.username,
@@ -31,6 +36,7 @@ async def create_user(
         role=user_create.role
     )
     return new_user
+
 
 @router.get("/{user_id}", response_model=UserResponse)
 async def get_user(
@@ -42,12 +48,14 @@ async def get_user(
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
+
 @router.get("/", response_model=list[UserResponse])
 async def get_all_users(
     db: AsyncSession = Depends(get_async_session)
 ):
     users = await crud.get_all_users(db)
     return users
+
 
 @router.patch("/{user_id}/status", response_model=UserResponse)
 async def update_user_status(
@@ -60,6 +68,7 @@ async def update_user_status(
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
+
 @router.delete("/{user_id}", response_model=dict)
 async def delete_user(
     user_id: int,
@@ -69,4 +78,7 @@ async def delete_user(
     if not success:
         raise HTTPException(status_code=404, detail="User not found")
     return {"detail": "User deleted successfully"}
+
+
+
 

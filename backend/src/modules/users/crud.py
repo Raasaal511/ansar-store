@@ -5,7 +5,8 @@ from .models import User, UserRole
 from auth.services import hash_password
 
 
-async def create_user(db: AsyncSession, username: str, is_active: str, email: str, password: str, phone: str | None = None, role: UserRole = UserRole.USER) -> User:
+async def create_user(db: AsyncSession, username: str, is_active: str, email: str, password: str,
+ phone: str | None = None, role: UserRole = UserRole.USER) -> User:
     hashed_password = hash_password(password)
     new_user = User(
         username=username,
@@ -21,6 +22,7 @@ async def create_user(db: AsyncSession, username: str, is_active: str, email: st
     return new_user
 
 
+
 async def get_user_by_username(db: AsyncSession, username: str) -> User | None:
     result = await db.execute(
         select(User)
@@ -30,6 +32,7 @@ async def get_user_by_username(db: AsyncSession, username: str) -> User | None:
     if not user:
         raise HttpException(status_code=404, detail="User not found")
     return user
+
 
 
 async def get_user_by_email(db: AsyncSession, email: str) -> User | None:
@@ -43,6 +46,7 @@ async def get_user_by_email(db: AsyncSession, email: str) -> User | None:
     return user
 
 
+
 async def get_user_by_id(db: AsyncSession, user_id: int) -> User | None:
     result =  await db.execute(
         select(User)
@@ -54,11 +58,13 @@ async def get_user_by_id(db: AsyncSession, user_id: int) -> User | None:
     return user
 
 
+
 async def get_all_users(db: AsyncSession) -> list[User]:
     result = await db.execute(select(User))
     users = result.scalars().all()
     return users
     
+
 
 async def delete_user(db: AsyncSession, user_id: int) -> bool:
     user = await db.execute(
@@ -68,6 +74,7 @@ async def delete_user(db: AsyncSession, user_id: int) -> bool:
         return False  
     await db.delete(user)
     await db.commit()
+
 
 
 async def update_user_status(db: AsyncSession, user_id: int, is_active: bool) -> User | None:
