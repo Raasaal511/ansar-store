@@ -28,7 +28,7 @@ class CartRead(BaseModel):
     id: int
     user_id: int
     created_at: datetime
-    cart_items: List[CartItemRead] = []
+    cart_items: CartItemRead
 
 
 class OrderItemRead(BaseModel):
