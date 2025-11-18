@@ -7,8 +7,6 @@ from . import crud, schemas
 router = APIRouter()
 
 
-#дальше корзина
-
 @router.post("/cart/items", response_model=schemas.CartItemRead)
 def add_to_cart(
     user_id: int,
@@ -52,12 +50,6 @@ def delete_cart_item(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Товар в корзине не найден")
-
-
-
-#заказы
-
-
 
 
 @router.post("/orders", response_model=schemas.OrderRead)

@@ -1,6 +1,10 @@
 from enum import Enum
+
 from sqlalchemy import String, Integer, Enum as SqlEnum
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
+
+from db.database import Base
+
 
 class UserRole(Enum):
     USER = "user"
@@ -10,7 +14,7 @@ class UserRole(Enum):
 class User(Base):
     __tablename__ = 'users'
 
-    id = Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     username: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     phone: Mapped[str | None] = mapped_column(String(20), nullable=True)
