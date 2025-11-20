@@ -26,7 +26,4 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
     return {"access_token": token, "token_type": "bearer"}
 
 
-@router.get("/me")
-def get_current_user(token: str = Depends(oauth2_scheme)):
-    payload = verify_token(token)
-    return {"user": payload.get("sub")}
+
