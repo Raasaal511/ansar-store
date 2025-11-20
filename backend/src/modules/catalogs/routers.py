@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Lis
+from typing import List
 from decimal import Decimal
 import pydantic
 from pydantic import BaseModel
+
 
 from database import get_async_session 
 from catalogs.models import Product
@@ -16,6 +17,7 @@ router = APIRouter(
 )
 
 
+
 class ProductBase(BaseModel):
     name: str
     price: Decimal
@@ -26,7 +28,7 @@ class ProductBase(BaseModel):
     in_stock: bool = True
     availability_count: int = 0
     
-
+    
     class Config:
         from_attributes = True 
 
@@ -35,7 +37,7 @@ class ProductCreate(ProductBase):
 
 class ProductRead(ProductBase):
     id: int
-
+    
 
 @router.get("/", response_model=List[ProductRead])
 async def read_products(
@@ -43,7 +45,7 @@ async def read_products(
     limit: int = 100, 
     session: AsyncSession = Depends(get_async_session)
 ):
-
+   
     products = await list_products(session, skip=skip, limit=limit)
     return products
 
@@ -53,7 +55,7 @@ async def create_product_endpoint(
     product_data: ProductCreate, 
     session: AsyncSession = Depends(get_async_session)
 ):
-    
+   
     new_product = await create_new_catalog_product(
         session=session,
         name=product_data.name,

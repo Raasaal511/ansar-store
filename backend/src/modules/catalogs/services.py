@@ -3,13 +3,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from decimal import Decimal
 from catalogs.crud import get_product, create_product, list_products, get_category
 from catalogs.models import Product
-from typing import List
+from typing import List 
 
 
 
 async def create_new_catalog_product(
     session: AsyncSession,
-    name: str, 
+    name: str,
     price: Decimal, 
     category_id: int, 
     brand_id: int 
@@ -23,7 +23,7 @@ async def create_new_catalog_product(
         session=session,
         name=name,
         price=price,
-        category_id=category_id,
+        category_id=category_id, 
         brand_id=brand_id
     )
     return product

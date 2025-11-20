@@ -2,9 +2,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from catalogs.models import Product, Category, Brand, Tag, Review, ProductImage
 from typing import List, Optional
-from decimal import Decimal 
+from decimal import Decimal
 
-async def get_product(session: AsyncSession, product_id: int) -> Optional[Product]:
+async def get_product(session: AsyncSession, product_id: int) -> Optional[Product]: 
     stmt = select(Product).where(Product.id == product_id)
     result = await session.execute(stmt)
     return result.scalar_one_or_none()
@@ -20,7 +20,7 @@ async def create_product(
     characteristic: str = None,
     in_stock: bool = True,
     availability_count: int = 0,
-
+ 
 ) -> Product:
     new_product = Product(
         name=name,
