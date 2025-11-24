@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Table, Boo
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 
-from db.database import Base 
+from db.database import Base  
 
 
 product_tags = Table(

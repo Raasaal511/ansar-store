@@ -1,3 +1,4 @@
+# catalogs/routers.py
 from typing import List
 from decimal import Decimal
 
@@ -6,7 +7,7 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.database import get_async_session
-from users.depends import role_deps  
+from users.depends import role_deps  # <-- зависимость пользователей (как просил)
 
 from catalogs.models import Product
 from catalogs.services import fetch_product_details, create_new_catalog_product
@@ -29,7 +30,7 @@ class ProductBase(BaseModel):
     availability_count: int = 0
 
     class Config:
-        orm_mode = True 
+        orm_mode = True  
 
 
 class ProductCreate(ProductBase):
@@ -58,7 +59,7 @@ async def read_products(
     "/",
     response_model=ProductRead,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[role_deps("admin")] 
+    dependencies=[role_deps("admin")]  
 )
 async def create_product_endpoint(
     product_data: ProductCreate,
