@@ -6,7 +6,7 @@ from decimal import Decimal
 import pydantic
 from pydantic import BaseModel
 
-	from database import get_async_session 
+from database import get_async_session 
 from catalogs.models import Product
 from catalogs.services import fetch_product_details, create_new_catalog_product
 from catalogs.crud import list_products
