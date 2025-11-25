@@ -21,4 +21,10 @@ class User(Base):
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     role: Mapped[UserRole] = mapped_column(SqlEnum(UserRole), default=UserRole.USER, nullable=False)
     is_active: Mapped[bool] = mapped_column(default=True, nullable=False)
+
+
+    cart: Mapped["Cart"] = relationship(back_populates="user")
+    cart_items: Mapped['CartItem'] = relationship(back_populates="user")
+    order: Mapped["Order"] = relationship(back_populates="user")
+    order_items: Mapped['OrderItem'] = relationship(back_populates="user")
     

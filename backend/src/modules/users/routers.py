@@ -5,25 +5,25 @@ from ..users import crud
 from ..users.models import User, UserRole
 from ..users.schemas import UserCreate, UserResponse, UserUpdateStatus
 from ..users.services import check_user_role
-
+from ..users.depends import role_deps
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 
 
-@router.post("/", response_model=UserResponse)
+@router.post("/", response_model=UserResponse, dependencies=[role_deps("admin", "manager","user")])
 async def create_user(
     user_create: UserCreate,
     db: AsyncSession = Depends(get_async_session)
 ):
 
     existing_user = await crud.get_user_by_username(db, user_create.username)
-    if existing_user:
+    if (existing_user):
         raise HTTPException(status_code=400, detail="Username already exists")
     
 
     existing_email = await crud.get_user_by_email(db, user_create.email)
-    if existing_email:
+    if (existing_email):
         raise HTTPException(status_code=400, detail="Email already exists")
     
 
@@ -38,7 +38,7 @@ async def create_user(
     return new_user
 
 
-@router.get("/{user_id}", response_model=UserResponse)
+@router.get("/{user_id}", response_model=UserResponse, dependencies=[role_deps("admin", "manager")])
 async def get_user(
     user_id: int,
     db: AsyncSession = Depends(get_async_session)
@@ -49,7 +49,7 @@ async def get_user(
     return user
 
 
-@router.get("/", response_model=list[UserResponse])
+@router.get("/", response_model=list[UserResponse], dependencies=[role_deps("admin", "manager")])
 async def get_all_users(
     db: AsyncSession = Depends(get_async_session)
 ):
@@ -57,7 +57,7 @@ async def get_all_users(
     return users
 
 
-@router.patch("/{user_id}/status", response_model=UserResponse)
+@router.patch("/{user_id}/status", response_model=UserResponse, dependencies=[role_deps("admin", "manager")])
 async def update_user_status(
     user_id: int,
     status_update: UserUpdateStatus,
@@ -69,7 +69,7 @@ async def update_user_status(
     return user
 
 
-@router.delete("/{user_id}", response_model=dict)
+@router.delete("/{user_id}", dependencies=[role_deps("admin","manager")])
 async def delete_user(
     user_id: int,
     db: AsyncSession = Depends(get_async_session)
