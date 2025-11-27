@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from backend.src.db.database import get_session
+from db.database import get_async_session
 from . import crud, schemas
 
 router = APIRouter()
@@ -11,7 +11,8 @@ router = APIRouter()
 def add_to_cart(
     user_id: int,
     item: schemas.CartItemCreate,
-    db: Session = Depends(get_session),):
+    db: Session = Depends(get_async_session),
+):
 
     item, created = crud.add_product_to_cart(db, user_id, item)
 
@@ -26,7 +27,7 @@ def add_to_cart(
 @router.get("/cart", response_model=schemas.CartRead)
 def get_cart(
     user_id: int,
-    db: Session = Depends(get_session)):
+    db: Session = Depends(get_async_session)):
     cart = crud.get_or_create_cart(db, user_id)
     return cart
 
@@ -34,7 +35,7 @@ def get_cart(
 @router.get("/cart/items", response_model=schemas.CartItemRead)
 def get_cart_items(
     user_id: int,
-    db: Session = Depends(get_session)):
+    db: Session = Depends(get_async_session)):
 
     return crud.get_cart_items(db, user_id)
 
@@ -44,7 +45,7 @@ def get_cart_items(
 def delete_cart_item(
     item_id: int,
     user_id: int,
-    db: Session = Depends(get_session)):
+    db: Session = Depends(get_async_session)):
     deleted = crud.delete_cart_item(db, user_id, item_id)
     if not deleted:
         raise HTTPException(
@@ -56,7 +57,7 @@ def delete_cart_item(
 def create_order(
     order_in: schemas.OrderCreate,
     user_id: int,
-    db: Session = Depends(get_session)):
+    db: Session = Depends(get_async_session)):
 
     order = crud.create_order_from_cart(db, user_id, order_in)
     if order is None:
@@ -69,7 +70,7 @@ def create_order(
 @router.get("/orders", response_model=schemas.OrderRead)
 def get_orders(
     user_id: int,
-    db: Session = Depends(get_session),):
+    db: Session = Depends(get_async_session),):
     return crud.get_orders_for_user(db, user_id)
 
 
@@ -77,7 +78,7 @@ def get_orders(
 def get_order(
     order_id: int,
     user_id: int,
-    db: Session = Depends(get_session)):
+    db: Session = Depends(get_async_session)):
     order = crud.get_order(db, order_id, user_id=user_id)
     if order is None:
         raise HTTPException(
@@ -90,7 +91,7 @@ def get_order(
 def change_order_status(
     order_id: int,
     statusss: schemas.OrderStatusUpdate,
-    db: Session = Depends(get_session)):
+    db: Session = Depends(get_async_session)):
     order = crud.update_order_status(db, order_id, statusss.status)
     if order is None:
         raise HTTPException(

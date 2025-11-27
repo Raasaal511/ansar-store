@@ -1,41 +1,32 @@
 version: "3.9"
 
 services:
-  app:
-    build: .
-    container_name: app
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fastapi-backend
+    ports:
+      - "8000:8000"
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgresql+psycopg2://user:password@db:5432/mydb
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/mydb
     volumes:
-      - .:/app
-    command: uvicorn main:app --host 0.0.0.0 --port 8000
-    ports:
-      - "8000:8000"
+      - ./backend:/app
 
   db:
     image: postgres:16
-    container_name: postgres_db
+    container_name: ansar_store_db
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: mydb
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     restart: unless-stopped
-
-backend:
-  build: .
-  container_name: fastapi-backend
-  ports:
-    - "8000:8000"
-  depends_on:
-    - db
-  environment:
-    DATABASE_URL: postgres://postgres:password@db:5432/mydb
 
 volumes:
   pgdata:

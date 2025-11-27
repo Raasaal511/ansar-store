@@ -1,9 +1,11 @@
 
+from itertools import product
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from decimal import Decimal
-from catalogs.crud import get_product, create_product, list_products, get_category
-from catalogs.models import Product
+
+from modules.catalogs.crud import get_product, create_product, list_products, get_category
+from modules.catalogs.models import Product
 from typing import List 
 
 
@@ -27,4 +29,9 @@ async def create_new_catalog_product(
         category_id=category_id, 
         brand_id=brand_id
     )
+    return product
+
+
+async def fetch_product_details(product_id: int, session: AsyncSession):
+    product = await get_product(session, product_id)
     return product

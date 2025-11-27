@@ -1,6 +1,6 @@
 from decimal import Decimal
 from sqlalchemy.orm import Session
-from backend.src.modules.orders import models, schemas
+from modules.orders import models, schemas
 
 
 def get_create_cart(db: Session, user_id: int) -> models.Cart:

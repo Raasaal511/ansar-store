@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from .jwt_utils import create_access_token, verify_token
+from . import create_access_token, verify_token
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
