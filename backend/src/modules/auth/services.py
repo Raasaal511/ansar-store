@@ -2,14 +2,12 @@ from passlib import CryptContext
 from jose import jwt, JWTError, ExpiredSignatureError
 from fastapi import HTTPException, status
 from datetime import datetime, timedelta, timezone
-from .env import get_auth_data
-from .env import SECRET_KEY, ALGORITHM
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from .jwt_utils import create_access_token, verify_token
 from users.models import User
 from sqlalchemy.orm import Session  
-from database import get_db
+from src.db.database import get_async_session
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")

@@ -2,13 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from decimal import Decimal
-import pydantic
 from pydantic import BaseModel
 
-from database import get_async_session 
-from catalogs.models import Product
-from catalogs.services import fetch_product_details, create_new_catalog_product
-from catalogs.crud import list_products
+from db.database import get_async_session
+from modules.catalogs.models import Product
+from modules.catalogs.services import fetch_product_details, create_new_catalog_product
+from modules.catalogs.crud import list_products
 
 router = APIRouter(
     prefix="/products",

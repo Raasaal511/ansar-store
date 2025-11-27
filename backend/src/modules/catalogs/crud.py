@@ -1,13 +1,17 @@
 
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from catalogs.models import Product, Category, Brand, Tag, Review, ProductImage
+from sqlalchemy import result_tuple, select
+from modules.catalogs.models import Product, Category, Brand, Tag, Review, ProductImage
 from typing import List, Optional
 from decimal import Decimal 
 
 async def get_product(session: AsyncSession, product_id: int) -> Optional[Product]: 
     stmt = select(Product).where(Product.id == product_id)
     result = await session.execute(stmt)
+
+    if not result:
+        raise HTTPException(status_code=404, detail="Продукт не найден")
     return result.scalar_one_or_none()
 
 
